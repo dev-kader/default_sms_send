@@ -45,6 +45,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   TextEditingController phoneController = TextEditingController();
 
+  TextEditingController testController = TextEditingController();
+
   // default sms send
   void _sendSMS(String message, List<String> recipents) async {
     String _result = await sendSMS(
@@ -70,6 +72,9 @@ class _HomePageState extends State<HomePage> {
   //   super.initState();
   // }
 
+
+  Color? color;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,16 +94,39 @@ class _HomePageState extends State<HomePage> {
             ElevatedButton(
               onPressed: () async {
                 final prefs = await SharedPreferences.getInstance();
-                prefs.setString("phone", phoneController.text);
-                String phoneSmg = '';
 
-                phoneSmg = prefs.getString("phone")!;
+
+                prefs.setString("phone", phoneController.text);
+                String phoneSmg = ''; phoneSmg = prefs.getString("phone")!;
                 String message = "Save";
                 List<String> recipents = [phoneSmg];
                 _sendSMS(message, recipents);
               },
               child: const Text("Save Phone number"),
             ),
+
+            TextField(
+              keyboardType: TextInputType.number,
+              controller: testController,
+              onChanged: (val){
+                setState(() {
+                  val= testController.text;
+                });
+              },
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+              ),
+            ),
+
+            SizedBox(height: 10,),
+
+            GestureDetector(
+              child: Container(
+               color:testController.text.length<8? const Color(0xffFF0000): const Color(0xff0000FF) ,
+                width: double.infinity,
+                height:50,
+                child: Center(child: Text("Send",style: TextStyle(color: Colors.white),)),),
+            )
             // SizedBox(
             //   height: 10,
             // ),
